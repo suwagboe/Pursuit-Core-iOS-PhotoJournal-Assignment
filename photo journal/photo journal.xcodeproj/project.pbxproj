@@ -15,6 +15,8 @@
 		5554E84C23DFAF8700D31F3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5554E84B23DFAF8700D31F3B /* Assets.xcassets */; };
 		5554E84F23DFAF8700D31F3B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5554E84D23DFAF8700D31F3B /* LaunchScreen.storyboard */; };
 		5554E85A23DFB06A00D31F3B /* imageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5554E85923DFB06A00D31F3B /* imageCell.swift */; };
+		559C171A23E247C40006F1B2 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C171923E247C40006F1B2 /* FileManager.swift */; };
+		559C171C23E247DE0006F1B2 /* PersistenceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C171B23E247DE0006F1B2 /* PersistenceHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		5554E84E23DFAF8700D31F3B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5554E85023DFAF8700D31F3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5554E85923DFB06A00D31F3B /* imageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageCell.swift; sourceTree = "<group>"; };
+		559C171923E247C40006F1B2 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		559C171B23E247DE0006F1B2 /* PersistenceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,7 @@
 		5554E84123DFAF8400D31F3B /* photo journal */ = {
 			isa = PBXGroup;
 			children = (
+				559C171823E2479D0006F1B2 /* Data Persistence */,
 				5554E85B23DFB1CC00D31F3B /* models */,
 				5554E85823DFB03300D31F3B /* views */,
 				5554E84823DFAF8400D31F3B /* Main.storyboard */,
@@ -103,6 +108,15 @@
 				5530AEE423DFB8B500FFF7B4 /* imageModel.swift */,
 			);
 			path = models;
+			sourceTree = "<group>";
+		};
+		559C171823E2479D0006F1B2 /* Data Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				559C171923E247C40006F1B2 /* FileManager.swift */,
+				559C171B23E247DE0006F1B2 /* PersistenceHelper.swift */,
+			);
+			path = "Data Persistence";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,6 +192,8 @@
 			files = (
 				5554E84723DFAF8400D31F3B /* ViewController.swift in Sources */,
 				5530AEE523DFB8B500FFF7B4 /* imageModel.swift in Sources */,
+				559C171A23E247C40006F1B2 /* FileManager.swift in Sources */,
+				559C171C23E247DE0006F1B2 /* PersistenceHelper.swift in Sources */,
 				5554E85A23DFB06A00D31F3B /* imageCell.swift in Sources */,
 				5554E84323DFAF8400D31F3B /* AppDelegate.swift in Sources */,
 				5554E84523DFAF8400D31F3B /* SceneDelegate.swift in Sources */,

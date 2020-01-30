@@ -6,6 +6,7 @@
 //  Copyright © 2020 Pursuit. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 protocol ImageCellDelegate: AnyObject {
@@ -13,7 +14,7 @@ protocol ImageCellDelegate: AnyObject {
     func didLongPress(_ imageCell: ImageCell)
 }
 
-class ImageCell{
+class ImageCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     
@@ -39,7 +40,6 @@ class ImageCell{
 //      // step 3
 //    //  addGestureRecognizer(longPressGesture)
 //    }
-  
     
 //    override func layoutSubViews() {
 //
