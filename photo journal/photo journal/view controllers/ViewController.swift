@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     
     private var uploadedPhoto: UIImage? {
         didSet{
-            
+            collectionView.reloadData()
         }
     }
     
@@ -168,9 +168,16 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // what are we doing here???
+        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            print("image selection not found. ")
+            return
+        }
+    
+        // assigns the data from image which is retrieved from above into the uploaded..
+        uploadedPhoto = image
         
-        
-        
+        // without the dissmis what WONT happen?/
+        dismiss(animated: true)
     }
     
 }
