@@ -99,38 +99,44 @@ class ViewController: UIViewController {
         
     }
     
-    // addPictureButton
-    
-    @IBAction func addPictureButtonPressed() {
+
+    private func showImageController(isCameraSelected: Bool){
+        
+        imagePickerController.sourceType = .photoLibrary
+        
+        if isCameraSelected {
+            imagePickerController.sourceType = .photoLibrary
+        }
+        present(imagePickerController, animated: true)
         
     }
     
-
-
-}
-
-extension ViewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return allPhotos.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? ImageCell else {
-            fatalError("couldt dequeue to the Imagecell..")
+    @IBAction func addPictureButtonPressed(_ sender: UIBarButtonItem) {
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) {
+            [weak self] alertAction in
+            self?.showImageController(isCameraSelected: true)
         }
         
-        let cellImage = allPhotos[indexPath.row]
-        cell.configureCell(imageObject: cellImage)
+        let photoLibraryAction = UIAlertAction(title: "photo library", style: .default) {
+            [weak self] alertAction in
+            
+            self?.showImageController(isCameraSelected: false)
+        }
         
-        //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
-        cell.imageDelegateReference = self
-        
-        return cell
+        let cancelAction = UIAlertAction(title: "cancel", style: .cancel)
+    
+        alertController.addAction(cancelAction)
+        alertController.addAction(cameraAction)
+        alertController.addAction(photoLibraryAction)
+        present(alertController, animated: true)
     }
     
-}
+    
 
+}
 // this is the custmon delegate that you made
 extension ViewController: ImageCellDelegate {
     func didLongPress(_ imageCell: ImageCell) {
@@ -180,6 +186,28 @@ extension ViewController: ImageCellDelegate {
     
 }
 
+
+extension ViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return allPhotos.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? ImageCell else {
+            fatalError("couldt dequeue to the Imagecell..")
+        }
+        
+        let cellImage = allPhotos[indexPath.row]
+        cell.configureCell(imageObject: cellImage)
+        
+        //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
+        cell.imageDelegateReference = self
+        
+        return cell
+    }
+    
+}
 extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let maxWidth: CGFloat = UIScreen.main.bounds.size.width
@@ -188,8 +216,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: itemWidth, height: itemWidth)
     }
 }
-
-
 
 extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     //MARK: WHY ARE THESE NEEDED???
