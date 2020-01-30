@@ -134,15 +134,48 @@ extension ViewController: UICollectionViewDataSource {
 // this is the custmon delegate that you made
 extension ViewController: ImageCellDelegate {
     func didLongPress(_ imageCell: ImageCell) {
-        //
+        // this cell was selected...
+        
+        guard let indexPath = collectionView.indexPath(for: imageCell) else {
+            return
+        }
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) {
+                  [weak self] alertAction in
+                  self?.DeletePhoto(indexPath: indexPath)
+              }
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
+        
     }
     
-    private func didDeletePhotoO(){
+    private func DeletePhoto(indexPath: IndexPath){
         // when they click delete
+        do{
+            try dataPersistence.deletePhoto(at: indexPath.row)
+            
+            allPhotos.remove(at: indexPath.row)
+            
+            collectionView.deleteItems(at: [indexPath])
+        } catch {
+            print("error in deleting \(error)")
+        }
+        
+    }
+    
+    private func didEditPhoto(){
         
         
     }
     
+    private func didUpdatePhoto(){
+        
+        // resave photo..
+    }
     
     
 }
