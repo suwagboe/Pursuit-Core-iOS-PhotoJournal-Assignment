@@ -34,14 +34,23 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        loadAllImages()
         
        // mainControllerDelegate.delegate = self
+    }
+    
+    private func loadAllImages() {
+        do {
+            // give the emtpy photos array photos
+           try allPhotos = dataPersistence.loadPhotos()
+        } catch {
+            print("here is the error: \(error)")
+        }
     }
     
     
     
     private func appendNewPhoto() {
-        
         guard let photo = uploadedPhoto else {
             print("the uploaded photo cant be accessed.")
             return
