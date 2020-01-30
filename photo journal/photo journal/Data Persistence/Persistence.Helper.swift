@@ -15,14 +15,18 @@ enum DataPersistenceError: Error{
         case decodingError(Error)
         case deletingError(Error)
     }
-
-
-
 // need to do custom delegation.. need it for deleting
+protocol dataPersistenceDelegate: AnyObject {
+    func didDeleteItem<T>(_ persistenceHelper: DataPersistence<T>, item: T)
+}
 
-class PersistenceHelper {
+typealias Writeable = Codable & Equatable
+
+class DataPersistence<T: Writeable> {
     
-    private var photos = [ImageObject]()
+    weak var delegate: dataPersistenceDelegate?
+    
+    private var photos = [T]()
     
     private var filename: String
     
@@ -50,7 +54,7 @@ class PersistenceHelper {
 
 
 // to update the array after the item is deleted
-    public func upadtesArray(photos: [ImageObject]) {
+    public func rearrangePhotos(photos: [T]) {
         // can this line be reexplained please
     self.photos = photos
         
@@ -59,7 +63,7 @@ class PersistenceHelper {
 }
     
     
-    public func createPhotos(aPhoto: ImageObject) throws{
+    public func createPhotos(aPhoto: T) throws{
         // reminder of why certain functions need a throw
         photos.append(aPhoto)
         
@@ -70,7 +74,7 @@ class PersistenceHelper {
         }
     }
 
-    public func loadEvents() throws -> [ImageObject] {
+    public func loadPhotos() throws -> [T] {
         
         let url = FileManager.pathToDocumentsDirectory(with: filename)
         
@@ -78,7 +82,7 @@ class PersistenceHelper {
             if let data = FileManager.default.contents(atPath: url.path) {
                 do {
                     // why do you need self here is it saying to check the photos self above.
-                    photos = try PropertyListDecoder().decode([ImageObject].self, from: data)
+                    photos = try PropertyListDecoder().decode([T].self, from: data)
                 } catch {
                     throw DataPersistenceError.decodingError(error)
                 }
@@ -94,4 +98,45 @@ class PersistenceHelper {
     public func delete(photos index: Int) throws {
         photos.remove(at: index)
     }
+    
+    //update
+    
+    @discardableResult
+    // this updates the location???
+    public func update(_ oldItems: T, with newItem: T) -> Bool {
+        if let index = photos.firstIndex(of: oldItems) {
+            let result = update(newItem, at: index)
+            
+            return result
+        }
+        return false //
+    }
+    
+    @discardableResult
+    // does this one update after it is deleted
+    public func update(_ aphoto: T, at Index: Int) -> Bool {
+        
+        photos[Index] = aphoto
+        
+        do {
+            try savePhoto()
+            return true
+        } catch {
+            return false
+        }
+    }
+    
+    public func deletePhoto(at Index: Int) throws {
+        
+        let deletedItem = photos.remove(at: Index)
+        
+        do {
+            try savePhoto()
+            delegate?.didDeleteItem(self, item: deletedItem)
+        } catch {
+            throw DataPersistenceError.deletingError(error)
+        }
+        
+    }
+    
 }
