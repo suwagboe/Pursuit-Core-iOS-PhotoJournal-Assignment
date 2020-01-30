@@ -31,27 +31,14 @@ class ImageCell: UICollectionViewCell {
         return gesture
         
             }()
-//    
-//    override func layoutSubviews() {
-//      super.layoutSubviews()
-//      layer.cornerRadius = 20.0
-//      backgroundColor = .orange
-//
-//      // step 3
-//    //  addGestureRecognizer(longPressGesture)
-//    }
-    
-//    override func layoutSubViews() {
-//
-//        super.layoutSubViews
-//        layer.cornerRadius = 20.0
-//            // figure out how to make this pink.. or sparkely
-//        backgroundColor = .purple
-//
-//        //3. need to add the gesture recoginzer
-//    }
-    
-    //2. function to hold the actual commands for the action
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = 20.0
+        backgroundColor = .magenta
+        
+            // step 3
+        addGestureRecognizer(longPressGesture)
+    }
     
     @objc
     private func longPressAction(gesture: UILongPressGestureRecognizer) {
