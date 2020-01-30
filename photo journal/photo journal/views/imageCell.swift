@@ -16,6 +16,8 @@ protocol ImageCellDelegate: AnyObject {
 
 class ImageCell: UICollectionViewCell {
     
+    // MARK: 
+    
     @IBOutlet weak var imageView: UIImageView!
     
     // need a weak instance of the custom delegate

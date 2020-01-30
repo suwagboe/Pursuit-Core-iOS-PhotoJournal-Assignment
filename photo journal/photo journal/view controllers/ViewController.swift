@@ -11,9 +11,12 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
-    var mainControllerDelegate = ViewController()
+    // this isnt working
+    var imagePickerController = UIImagePickerController()
     
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    
     
     //MARK: question 6
     // why is it an optional when in scheduler we banged it.
@@ -34,9 +37,11 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        imagePickerController.delegate = self as! UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        
         loadAllImages()
         
-       // mainControllerDelegate.delegate = self
+        //mainControllerDelegate.delegate = self
     }
     
     private func loadAllImages() {
@@ -47,7 +52,6 @@ class ViewController: UIViewController {
             print("here is the error: \(error)")
         }
     }
-    
     
     
     private func appendNewPhoto() {
@@ -108,7 +112,7 @@ class ViewController: UIViewController {
 extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return allPhotos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -119,18 +123,55 @@ extension ViewController: UICollectionViewDataSource {
         let cellImage = allPhotos[indexPath.row]
         cell.configureCell(imageObject: cellImage)
         
-        //???
-        cell.imageDelegateReference = self as! ImageCellDelegate
+        //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
+        cell.imageDelegateReference = self
         
         return cell
     }
     
 }
 
+// this is the custmon delegate that you made
+extension ViewController: ImageCellDelegate {
+    func didLongPress(_ imageCell: ImageCell) {
+        //
+    }
+    
+    private func didDeletePhotoO(){
+        // when they click delete
+        
+        
+    }
+    
+    
+    
+}
+
 extension ViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let maxWidth: CGFloat = UIScreen.main.bounds.size.width
+        let itemWidth: CGFloat = maxWidth * 0.80 // this is 80% of the device
+        
+        return CGSize(width: itemWidth, height: itemWidth)
+    }
+}
+
+
+
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    //MARK: WHY ARE THESE NEEDED???
     
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        //MARK: what does this do?
+        dismiss(animated: true)
+    }
     
-    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // what are we doing here???
+        
+        
+        
+    }
     
 }
 
