@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5530AEE523DFB8B500FFF7B4 /* imageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530AEE423DFB8B500FFF7B4 /* imageModel.swift */; };
+		55512AC123E3B2040093ED6A /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55512AC023E3B2040093ED6A /* DetailController.swift */; };
 		5554E84323DFAF8400D31F3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5554E84223DFAF8400D31F3B /* AppDelegate.swift */; };
 		5554E84523DFAF8400D31F3B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5554E84423DFAF8400D31F3B /* SceneDelegate.swift */; };
 		5554E84723DFAF8400D31F3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5554E84623DFAF8400D31F3B /* ViewController.swift */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		5530AEE423DFB8B500FFF7B4 /* imageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageModel.swift; sourceTree = "<group>"; };
+		55512AC023E3B2040093ED6A /* DetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
 		5554E83F23DFAF8400D31F3B /* photo journal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "photo journal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5554E84223DFAF8400D31F3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5554E84423DFAF8400D31F3B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				5554E84623DFAF8400D31F3B /* ViewController.swift */,
+				55512AC023E3B2040093ED6A /* DetailController.swift */,
 			);
 			path = "view controllers";
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55512AC123E3B2040093ED6A /* DetailController.swift in Sources */,
 				5554E84723DFAF8400D31F3B /* ViewController.swift in Sources */,
 				5530AEE523DFB8B500FFF7B4 /* imageModel.swift in Sources */,
 				559C171A23E247C40006F1B2 /* FileManager.swift in Sources */,

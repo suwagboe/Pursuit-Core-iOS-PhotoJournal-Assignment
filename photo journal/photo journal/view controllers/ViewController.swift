@@ -10,12 +10,12 @@ import UIKit
 import AVFoundation
 
 class ViewController: UIViewController {
+    
 
     // this isnt working
     var imagePickerController = UIImagePickerController()
     
     @IBOutlet weak var collectionView: UICollectionView!
-    
     
     
     //MARK: question 6
@@ -27,7 +27,10 @@ class ViewController: UIViewController {
     
     private var uploadedPhoto: UIImage? {
         didSet{
-            collectionView.reloadData()
+            
+            
+              appendNewPhoto()
+            
         }
     }
     
@@ -37,8 +40,7 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        imagePickerController.delegate = self as! UIImagePickerControllerDelegate & UINavigationControllerDelegate
-        
+        imagePickerController.delegate = self
         loadAllImages()
         
         //mainControllerDelegate.delegate = self
@@ -53,13 +55,29 @@ class ViewController: UIViewController {
         }
     }
     
+    func segueImageToDetailWithImage(image: UIImage) {
+//        guard let photo = uploadedPhoto else {
+//                   print("the uploaded photo cant be accessed.")
+//                   return
+//               }
+        
+           guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
+               fatalError("couldnt access DetailController")
+           }
+
+           present(dv, animated: true, completion: nil)
+           
+        dv.seletedImage = image
+           
+       }
+    
     
     private func appendNewPhoto() {
         guard let photo = uploadedPhoto else {
             print("the uploaded photo cant be accessed.")
             return
         }
-        
+       // segueImageToDetail()
 //want to ensure the size of the photo is what is needed.
         let size = UIScreen.main.bounds.size // this gives access to the size
         
@@ -111,6 +129,7 @@ class ViewController: UIViewController {
         
     }
     
+    
     @IBAction func addPictureButtonPressed(_ sender: UIBarButtonItem) {
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -118,6 +137,7 @@ class ViewController: UIViewController {
         let cameraAction = UIAlertAction(title: "Camera", style: .default) {
             [weak self] alertAction in
             self?.showImageController(isCameraSelected: true)
+            
         }
         
         let photoLibraryAction = UIAlertAction(title: "photo library", style: .default) {
@@ -228,6 +248,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // what are we doing here???
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            // photo library is automatically a UIImagePickerController.. 
             print("image selection not found. ")
             return
         }
