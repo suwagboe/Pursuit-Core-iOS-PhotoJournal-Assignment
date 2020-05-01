@@ -10,5 +10,6 @@ import Foundation
 
 struct JournalModel: Codable & Equatable {
     let image: ImageObject
-    let description: String    
+    let description: String
+    let date: Date
 }

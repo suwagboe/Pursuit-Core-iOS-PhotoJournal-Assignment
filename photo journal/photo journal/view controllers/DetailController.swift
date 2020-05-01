@@ -19,9 +19,6 @@ class DetailController: UIViewController {
         super.viewDidLoad()
         detailsOfImage?.delegate = self
         configureDetailController()
-        
-        
-        isModalInPresentation = true
 
     }
     
@@ -32,32 +29,51 @@ class DetailController: UIViewController {
         addedPhoto?.image = UIImage(data: model.image.imageData)
         detailsOfImage?.text = model.description
     }
-    
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let vc = storyboard?.instantiateViewController(identifier: "viewController") as? ViewController else {
-                  fatalError("couldnt access DetailController")
-              }
-        do {
-           try  vc.dp.createAEntry(journalEntry: seletedImage!)
-        } catch {
-           print("the error is inside of detail controller: \(error)")
-        }
+  
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        guard let vc = storyboard?.instantiateViewController(identifier: "viewController") as? ViewController else {
+//                  fatalError("couldnt access DetailController")
+//              }
+//        do {
+//           try  vc.dp.createAEntry(journalEntry: seletedImage!)
+//        } catch {
+//           print("the error is inside of detail controller: \(error)")
+//        }
+//        
+//    }
+    private func updateJournalEntries() {
+        
         
     }
     
     
     @IBAction func updateEntry(_ sender: UIButton) {
         
+        guard let vc = storyboard?.instantiateViewController(identifier: "ViewController") as? ViewController else {
+                         fatalError("couldnt access DetailController")
+                     }
         
+        guard let appendEntry = seletedImage else {
+                   print("the selectedImage is not appending properly")
+            return
+               }
+               
+               do {
+                  try  vc.dp.createAEntry(journalEntry: appendEntry)
+              //  vc.journalEntries.append(appendEntry) - should not access this variable here
+
+               } catch {
+                  print("the error is inside of detail controller: \(error)")
+                print("the entry did not append")
+               }
+        
+        dismiss(animated: true)
         
     }
     
 }
 
 extension DetailController: UITextViewDelegate {
-    
     
     
 }

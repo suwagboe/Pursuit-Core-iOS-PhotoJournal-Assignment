@@ -19,7 +19,9 @@ class JournalEntryCell: UICollectionViewCell {
     // MARK: 
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var textview: UITextView!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var extraActionsButton: UIButton!
     
     // need a weak instance of the custom delegate
     // need reference in order to access the protocol method inside of it
@@ -63,14 +65,14 @@ class JournalEntryCell: UICollectionViewCell {
         }
         
         imageView.image = image
-        textview.text = journalEntry.description
+        descriptionLabel.text = journalEntry.description
         
     }
     
     
     public func segueBackToMain(){
         
-        let mainC = ViewController()
+    //    let mainC = ViewController()
         
       //  when they are done I should be able to segue back to the first/main controller.
         

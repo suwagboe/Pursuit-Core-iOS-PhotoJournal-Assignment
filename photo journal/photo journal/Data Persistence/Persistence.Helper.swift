@@ -65,6 +65,9 @@ class DataPersistence<T: Writeable> {
     
     public func createAEntry(journalEntry: T) throws{
         // reminder of why certain functions need a throw
+        
+        _ = try loadEntries() // in order to get the older entries I need this 
+        
         entry.append(journalEntry)
         
         do {
@@ -89,9 +92,11 @@ class DataPersistence<T: Writeable> {
             } else {
                 throw DataPersistenceError.noData
             }
-        } else {
-            throw DataPersistenceError.fileDoesNotExist(filename)
         }
+        
+//        else {
+//            throw DataPersistenceError.fileDoesNotExist(filename)
+//        }
         return entry
     }
     
@@ -103,9 +108,9 @@ class DataPersistence<T: Writeable> {
     
     @discardableResult
     // this updates the location???
-    public func update(_ oldItems: T, with newItem: T) -> Bool {
+    public func updateOne(_ oldItems: T, with newItem: T) -> Bool {
         if let index = entry.firstIndex(of: oldItems) {
-            let result = update(newItem, at: index)
+            let result = updateTwo(newItem, at: index)
             
             return result
         }
@@ -114,7 +119,7 @@ class DataPersistence<T: Writeable> {
     
     @discardableResult
     // does this one update after it is deleted
-    public func update(_ aEntry: T, at Index: Int) -> Bool {
+    public func updateTwo(_ aEntry: T, at Index: Int) -> Bool {
         
         entry[Index] = aEntry
         

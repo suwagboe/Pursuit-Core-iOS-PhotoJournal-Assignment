@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     // why not the generic ... why the model??
     let dp = DataPersistence<JournalModel>(filename: "photos.plist")
     
-    private var journalEntries = [JournalModel](){
+    private var journalEntries = [JournalModel]() {
         didSet {
             collectionView.reloadData()
         }
@@ -40,14 +40,12 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         imagePickerController.delegate = self
         loadAllEntries()
-        
-        //mainControllerDelegate.delegate = self
-    }
+            }
     
     override func viewWillAppear(_ animated: Bool) {
         loadAllEntries()
     }
-    
+//
     private func loadAllEntries() {
         do {
             try journalEntries = dp.loadEntries()
@@ -57,11 +55,6 @@ class ViewController: UIViewController {
     }
     
     func segueImageToDetailWithImage(image: UIImage) {
-//        guard let photo = uploadedPhoto else {
-//                   print("the uploaded photo cant be accessed.")
-//                   return
-//               }
-        
            guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
                fatalError("couldnt access DetailController")
            }
@@ -70,8 +63,14 @@ class ViewController: UIViewController {
                       
        }
     
+    private lazy var dateFormatter: DateFormatter = {
+           let formatter = DateFormatter()
+           formatter.dateFormat = "EEEE, MMM d, yyyy, hh:mm a"
+           formatter.timeZone = .current
+           return formatter
+       }()
+    
     private func appendNewEntry() {
-        
        // guard let photo =
     guard let photo = uploadedPhoto else {
             print("double check that the photo is avaiable...")
@@ -94,22 +93,21 @@ class ViewController: UIViewController {
         guard let photoData = resizedPhoto.jpegData(compressionQuality: 1.0) else {
             return
         }
-        
         let justAddedImageObject = ImageObject(imageData: photoData, date: Date())
         
        // photos.insert(justAddedImageObject, at: 0)
-        
         // insert in at the beginning ... of the row and section
+        
+        
         let indexPath = IndexPath(row: 0, section: 0)
         
         // ????
-           let newJorunal = JournalModel(image: justAddedImageObject, description: "Please enter descrpition")
+        let newJorunal = JournalModel(image: justAddedImageObject, description: "Please enter descrpition", date: Date()
+        
+        )
         
         journalEntries.insert(newJorunal, at: 0)
-        
         collectionView.insertItems(at: [indexPath])
-        
-     
         
         do {
             try dp.createAEntry(journalEntry: newJorunal)
@@ -190,17 +188,6 @@ extension ViewController: CellDelegate {
         }
         
     }
-    
-    private func didEditPhoto(){
-        
-        
-    }
-    
-    private func didUpdatePhoto(){
-        
-    }
-    
-    
 }
 
 
@@ -216,6 +203,7 @@ extension ViewController: UICollectionViewDataSource {
         }
         
         let cellEntry = journalEntries[indexPath.row]
+        
         cell.configureCell(journalEntry: cellEntry)
         
         //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
@@ -227,10 +215,15 @@ extension ViewController: UICollectionViewDataSource {
 }
 extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let maxWidth: CGFloat = UIScreen.main.bounds.size.width
-        let itemWidth: CGFloat = maxWidth * 0.80 // this is 80% of the device
+        let screenSize: CGSize = UIScreen.main.bounds.size
+        let itemWidth: CGFloat = screenSize.width * 0.8// this is 80% of the device
+        let itemHeight: CGFloat = screenSize.height * 0.4
         
-        return CGSize(width: itemWidth, height: itemWidth)
+        return CGSize(width: itemWidth, height: itemHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
 
@@ -266,7 +259,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         
         let imageData = image.jpegData(compressionQuality: 1) ?? nil!
         let createdImageObject = ImageObject(imageData: imageData, date: Date())
-        dv.seletedImage = JournalModel(image: createdImageObject , description: "please tell us what this photo means to you ")
+        dv.seletedImage = JournalModel(image: createdImageObject , description: "please tell us what this photo means to you ", date: Date())
         
         dv.isModalInPresentation = true
 
