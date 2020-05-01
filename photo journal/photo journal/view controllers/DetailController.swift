@@ -13,6 +13,8 @@ class DetailController: UIViewController {
     @IBOutlet weak var addedPhoto: UIImageView?
     @IBOutlet weak var detailsOfImage: UITextView?
     
+    // long press to update the image
+    
     var seletedImage: JournalModel?
     
     override func viewDidLoad() {
@@ -32,7 +34,6 @@ class DetailController: UIViewController {
   
 
     private func updateJournalEntries() {
-        
         
     }
     
@@ -57,7 +58,7 @@ class DetailController: UIViewController {
                 print("the entry did not append")
                }
         
-        dismiss(animated: true)
+    dismiss(animated: true)
         
     }
     
@@ -81,3 +82,5 @@ extension DetailController: UITextFieldDelegate {
              return true
          }
     }
+
+//extension DetailController:

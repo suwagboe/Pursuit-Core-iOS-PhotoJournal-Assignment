@@ -30,7 +30,6 @@ class ViewController: UIViewController {
     
     private var uploadedPhoto : UIImage?
     
-    
      var uploadedNewEntry: JournalModel?
     
     override func viewDidLoad() {
@@ -57,6 +56,7 @@ class ViewController: UIViewController {
            guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
                fatalError("couldnt access DetailController")
            }
+           dv.isModalInPresentation = true
            present(dv, animated: true)
        }
     
@@ -159,7 +159,9 @@ extension ViewController: EditButtonDelegate {
             return
         }
         
+        // this gains access to the sepefic one that was clicked
         let journalEntryClicked = journalEntries[indexPath.row]
+        // this gains access to the image data from the selected entry 
         let imageFromJournalEntry = journalEntryClicked.image.imageData
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) {
@@ -169,6 +171,7 @@ extension ViewController: EditButtonDelegate {
         
         let editAction = UIAlertAction(title: "Edit", style: .default) {
             [weak self] alertAction in
+            
             self?.segueImageToDetailWithImage(image: UIImage(data: imageFromJournalEntry) ?? UIImage(systemName: "questionmark")!)
         }
         

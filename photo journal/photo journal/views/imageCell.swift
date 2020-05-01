@@ -13,6 +13,7 @@ import AVFoundation
 protocol EditButtonDelegate: AnyObject {
     // this is for a custom delegate
     func editButtonPressed(indexOfEntry: Int, _ imageCell: JournalEntryCell)
+    
 }
 
 class JournalEntryCell: UICollectionViewCell {
