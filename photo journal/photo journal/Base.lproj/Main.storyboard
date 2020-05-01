@@ -129,6 +129,9 @@
                                                     <state key="normal" title="lets do something else with this entry">
                                                         <color key="titleColor" red="0.72549175129999999" green="0.0" blue="0.36974961429999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="editButtonPressed:" destination="dLZ-5a-Uw5" eventType="touchUpInside" id="ts0-nv-vT4"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="how does this photo make you feel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eqi-Ff-RZB">
                                                     <rect key="frame" x="8" y="220" width="239" height="75"/>

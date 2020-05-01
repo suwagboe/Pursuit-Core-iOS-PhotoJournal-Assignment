@@ -150,9 +150,10 @@ class ViewController: UIViewController {
     }
 }
 // this is the custmon delegate that you made
-extension ViewController: CellDelegate {
-    func didLongPress(_ imageCell: JournalEntryCell) {
+extension ViewController: EditButtonDelegate {
+    func editButtonPressed(indexOfEntry: Int, _ imageCell: JournalEntryCell) {
         // this cell was selected...
+          let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         guard let indexPath = collectionView.indexPath(for: imageCell) else {
             return
@@ -162,7 +163,7 @@ extension ViewController: CellDelegate {
                   self?.DeleteEntry(indexPath: indexPath)
               }
         
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+      
     
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
@@ -203,7 +204,7 @@ extension ViewController: UICollectionViewDataSource {
         cell.configureCell(journalEntry: cellEntry)
         
         //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
-        cell.JournalEntryDelegateReference = self
+    //    cell.JournalEntryDelegateReference = self
         
         return cell
     }
