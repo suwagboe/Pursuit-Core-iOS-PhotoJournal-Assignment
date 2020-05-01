@@ -9,20 +9,21 @@
 import Foundation
 import UIKit
 
-protocol ImageCellDelegate: AnyObject {
+protocol CellDelegate: AnyObject {
     // this is for a custom delegate
-    func didLongPress(_ imageCell: ImageCell)
+    func didLongPress(_ imageCell: JournalEntryCell)
 }
 
-class ImageCell: UICollectionViewCell {
+class JournalEntryCell: UICollectionViewCell {
     
     // MARK: 
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var textview: UITextView!
     
     // need a weak instance of the custom delegate
     // need reference in order to access the protocol method inside of it
-    weak var imageDelegateReference: ImageCellDelegate?
+    weak var JournalEntryDelegateReference: CellDelegate?
     
     // 1: SetUp
     private lazy var longPressGesture: UILongPressGestureRecognizer = {
@@ -53,15 +54,26 @@ class ImageCell: UICollectionViewCell {
         }
         
         // why is it calling itself again...
-        imageDelegateReference?.didLongPress(self)
+        JournalEntryDelegateReference?.didLongPress(self)
     }
     
-    public func configureCell(imageObject: ImageObject){
-        guard let image = UIImage(data: imageObject.imageData) else {
+    public func configureCell(journalEntry: JournalModel){
+        guard let image = UIImage(data: journalEntry.image.imageData) else {
             return
         }
         
         imageView.image = image
+        textview.text = journalEntry.description
+        
+    }
+    
+    
+    public func segueBackToMain(){
+        
+        let mainC = ViewController()
+        
+      //  when they are done I should be able to segue back to the first/main controller.
+        
     }
     
 }

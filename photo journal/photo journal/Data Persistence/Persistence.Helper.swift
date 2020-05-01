@@ -26,7 +26,7 @@ class DataPersistence<T: Writeable> {
     
     weak var delegate: dataPersistenceDelegate?
     
-    private var photos = [T]()
+    private var entry = [T]()
     
     private var filename: String
     
@@ -35,14 +35,14 @@ class DataPersistence<T: Writeable> {
         self.filename = filename
     }
     
-    private func savePhoto() throws {
+    private func saveAJournalEntry() throws {
         // assign the url to the url that allows access to the location inside of the device
         let url = FileManager.pathToDocumentsDirectory(with: filename)
             print(url)
         
         do {
             // conver the photo into data
-            let data = try PropertyListEncoder().encode(photos)
+            let data = try PropertyListEncoder().encode(entry)
             
             // want the photo converted to data to added into the location of the url
             try data.write(to: url, options: .atomic)
@@ -54,27 +54,27 @@ class DataPersistence<T: Writeable> {
 
 
 // to update the array after the item is deleted
-    public func rearrangePhotos(photos: [T]) {
+    public func rearrangeEntries(entry: [T]) {
         // can this line be reexplained please
-    self.photos = photos
+    self.entry = entry
         
         // this resaves it?
-        try? savePhoto()
+        try? saveAJournalEntry()
 }
     
     
-    public func createPhotos(aPhoto: T) throws{
+    public func createAEntry(journalEntry: T) throws{
         // reminder of why certain functions need a throw
-        photos.append(aPhoto)
+        entry.append(journalEntry)
         
         do {
-            try savePhoto()
-        } catch {
+            try saveAJournalEntry()
+        }   catch {
             throw DataPersistenceError.savingError(error)
         }
     }
 
-    public func loadPhotos() throws -> [T] {
+    public func loadEntries() throws -> [T] {
         
         let url = FileManager.pathToDocumentsDirectory(with: filename)
         
@@ -82,7 +82,7 @@ class DataPersistence<T: Writeable> {
             if let data = FileManager.default.contents(atPath: url.path) {
                 do {
                     // why do you need self here is it saying to check the photos self above.
-                    photos = try PropertyListDecoder().decode([T].self, from: data)
+                    entry = try PropertyListDecoder().decode([T].self, from: data)
                 } catch {
                     throw DataPersistenceError.decodingError(error)
                 }
@@ -92,11 +92,11 @@ class DataPersistence<T: Writeable> {
         } else {
             throw DataPersistenceError.fileDoesNotExist(filename)
         }
-        return photos
+        return entry
     }
     
     public func delete(photos index: Int) throws {
-        photos.remove(at: index)
+        entry.remove(at: index)
     }
     
     //update
@@ -104,7 +104,7 @@ class DataPersistence<T: Writeable> {
     @discardableResult
     // this updates the location???
     public func update(_ oldItems: T, with newItem: T) -> Bool {
-        if let index = photos.firstIndex(of: oldItems) {
+        if let index = entry.firstIndex(of: oldItems) {
             let result = update(newItem, at: index)
             
             return result
@@ -114,24 +114,24 @@ class DataPersistence<T: Writeable> {
     
     @discardableResult
     // does this one update after it is deleted
-    public func update(_ aphoto: T, at Index: Int) -> Bool {
+    public func update(_ aEntry: T, at Index: Int) -> Bool {
         
-        photos[Index] = aphoto
+        entry[Index] = aEntry
         
         do {
-            try savePhoto()
+            try saveAJournalEntry()
             return true
         } catch {
             return false
         }
     }
     
-    public func deletePhoto(at Index: Int) throws {
+    public func deleteEntry(at Index: Int) throws {
         
-        let deletedItem = photos.remove(at: Index)
+        let deletedItem = entry.remove(at: Index)
         
         do {
-            try savePhoto()
+            try saveAJournalEntry()
             delegate?.didDeleteItem(self, item: deletedItem)
         } catch {
             throw DataPersistenceError.deletingError(error)

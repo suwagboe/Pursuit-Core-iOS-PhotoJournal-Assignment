@@ -18,6 +18,8 @@
 		5554E85A23DFB06A00D31F3B /* imageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5554E85923DFB06A00D31F3B /* imageCell.swift */; };
 		559C171A23E247C40006F1B2 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C171923E247C40006F1B2 /* FileManager.swift */; };
 		559C171C23E247DE0006F1B2 /* Persistence.Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C171B23E247DE0006F1B2 /* Persistence.Helper.swift */; };
+		55D8047423F48A2D00A14895 /* journalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8047323F48A2D00A14895 /* journalModel.swift */; };
+		55D8047623F48B3100A14895 /* Alert+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D8047523F48B3100A14895 /* Alert+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		5554E85923DFB06A00D31F3B /* imageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageCell.swift; sourceTree = "<group>"; };
 		559C171923E247C40006F1B2 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		559C171B23E247DE0006F1B2 /* Persistence.Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.Helper.swift; sourceTree = "<group>"; };
+		55D8047323F48A2D00A14895 /* journalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = journalModel.swift; sourceTree = "<group>"; };
+		55D8047523F48B3100A14895 /* Alert+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,10 +70,10 @@
 		5554E84123DFAF8400D31F3B /* photo journal */ = {
 			isa = PBXGroup;
 			children = (
+				5554E84823DFAF8400D31F3B /* Main.storyboard */,
 				559C171823E2479D0006F1B2 /* Data Persistence */,
 				5554E85B23DFB1CC00D31F3B /* models */,
 				5554E85823DFB03300D31F3B /* views */,
-				5554E84823DFAF8400D31F3B /* Main.storyboard */,
 				5554E85723DFAFBF00D31F3B /* view controllers */,
 				5554E85623DFAF8D00D31F3B /* supporting files */,
 				5554E85023DFAF8700D31F3B /* Info.plist */,
@@ -84,6 +88,7 @@
 				5554E84B23DFAF8700D31F3B /* Assets.xcassets */,
 				5554E84423DFAF8400D31F3B /* SceneDelegate.swift */,
 				5554E84223DFAF8400D31F3B /* AppDelegate.swift */,
+				55D8047523F48B3100A14895 /* Alert+Extensions.swift */,
 			);
 			path = "supporting files";
 			sourceTree = "<group>";
@@ -109,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				5530AEE423DFB8B500FFF7B4 /* imageModel.swift */,
+				55D8047323F48A2D00A14895 /* journalModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -197,8 +203,10 @@
 				5554E84723DFAF8400D31F3B /* ViewController.swift in Sources */,
 				5530AEE523DFB8B500FFF7B4 /* imageModel.swift in Sources */,
 				559C171A23E247C40006F1B2 /* FileManager.swift in Sources */,
+				55D8047623F48B3100A14895 /* Alert+Extensions.swift in Sources */,
 				559C171C23E247DE0006F1B2 /* Persistence.Helper.swift in Sources */,
 				5554E85A23DFB06A00D31F3B /* imageCell.swift in Sources */,
+				55D8047423F48A2D00A14895 /* journalModel.swift in Sources */,
 				5554E84323DFAF8400D31F3B /* AppDelegate.swift in Sources */,
 				5554E84523DFAF8400D31F3B /* SceneDelegate.swift in Sources */,
 			);

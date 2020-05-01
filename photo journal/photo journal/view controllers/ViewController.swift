@@ -10,46 +10,47 @@ import UIKit
 import AVFoundation
 
 class ViewController: UIViewController {
-    
 
-    // this isnt working
     var imagePickerController = UIImagePickerController()
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    
     //MARK: question 6
     // why is it an optional when in scheduler we banged it.
     // why not the generic ... why the model??
-    let dataPersistence = DataPersistence<ImageObject>(filename: "photos.plist")
+    let dp = DataPersistence<JournalModel>(filename: "photos.plist")
     
-    private var allPhotos = [ImageObject]()
-    
-    private var uploadedPhoto: UIImage? {
-        didSet{
-            
-            
-              appendNewPhoto()
-            
+    private var journalEntries = [JournalModel](){
+        didSet {
+            collectionView.reloadData()
         }
     }
     
+    
+    private var photos = [ImageObject]()
+    
+    private var uploadedPhoto : UIImage?
+    
+    
+     var uploadedNewEntry: JournalModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         imagePickerController.delegate = self
-        loadAllImages()
+        loadAllEntries()
         
         //mainControllerDelegate.delegate = self
     }
     
-    private func loadAllImages() {
+    override func viewWillAppear(_ animated: Bool) {
+        loadAllEntries()
+    }
+    
+    private func loadAllEntries() {
         do {
-            // give the emtpy photos array photos
-           try allPhotos = dataPersistence.loadPhotos()
+            try journalEntries = dp.loadEntries()
         } catch {
             print("here is the error: \(error)")
         }
@@ -65,54 +66,55 @@ class ViewController: UIViewController {
                fatalError("couldnt access DetailController")
            }
 
-           present(dv, animated: true, completion: nil)
-           
-        dv.seletedImage = image
-           
+           present(dv, animated: true)
+                      
        }
     
-    
-    private func appendNewPhoto() {
-        guard let photo = uploadedPhoto else {
-            print("the uploaded photo cant be accessed.")
+    private func appendNewEntry() {
+        
+       // guard let photo =
+    guard let photo = uploadedPhoto else {
+            print("double check that the photo is avaiable...")
             return
         }
-       // segueImageToDetail()
-//want to ensure the size of the photo is what is needed.
-        let size = UIScreen.main.bounds.size // this gives access to the size
         
-        // what does this say??
-        // Does this make the shape of a rectangle??
+        print("The original image size is \(photo.size)")
+        
+        // this is the size of the entire screen
+        let size = UIScreen.main.bounds.size
+        
+       // this is the size that we want the photo to be...
         let rect = AVMakeRect(aspectRatio: photo.size, insideRect: CGRect(origin: CGPoint.zero, size: size))
         
-        //what is this for??
-        let resizeImage = photo.resizeImage(width: rect.size.width, height: rect.size.height)
+        let resizedPhoto = photo.resizeImage(width: rect.size.width, height: rect.size.height)
         
-        guard let imageData = resizeImage.jpegData(compressionQuality: 1.0) else {
-            // MARK:question 5. why 1.0 what does it stand for
+        print("this is the image after resizing it \(resizedPhoto)")
+        
+        // converts photo into data
+        guard let photoData = resizedPhoto.jpegData(compressionQuality: 1.0) else {
             return
         }
         
-        //image object with the selected image
-            // MARK: the below code is not working and I dont understand why..
-        let imageObject = ImageObject(imageData: imageData, date: Date())
+        let justAddedImageObject = ImageObject(imageData: photoData, date: Date())
         
-// appending into the empty variable of ImageObjects above
+       // photos.insert(justAddedImageObject, at: 0)
         
-        allPhotos.insert(imageObject, at: 0)
-        
-        // the place for insertion
+        // insert in at the beginning ... of the row and section
         let indexPath = IndexPath(row: 0, section: 0)
         
-        //the location to insert the items at
+        // ????
+           let newJorunal = JournalModel(image: justAddedImageObject, description: "Please enter descrpition")
+        
+        journalEntries.insert(newJorunal, at: 0)
+        
         collectionView.insertItems(at: [indexPath])
         
-        // persist the object to documents directory
-    
-        do{
-            try dataPersistence.createPhotos(aPhoto: imageObject)
+     
+        
+        do {
+            try dp.createAEntry(journalEntry: newJorunal)
         }catch{
-            print("The error is \(error)")
+            print("the error is: \(error)!!!!!!!!!!!!!")
         }
         
     }
@@ -137,12 +139,11 @@ class ViewController: UIViewController {
         let cameraAction = UIAlertAction(title: "Camera", style: .default) {
             [weak self] alertAction in
             self?.showImageController(isCameraSelected: true)
-            
+           
         }
         
         let photoLibraryAction = UIAlertAction(title: "photo library", style: .default) {
             [weak self] alertAction in
-            
             self?.showImageController(isCameraSelected: false)
         }
         
@@ -153,13 +154,10 @@ class ViewController: UIViewController {
         alertController.addAction(photoLibraryAction)
         present(alertController, animated: true)
     }
-    
-    
-
 }
 // this is the custmon delegate that you made
-extension ViewController: ImageCellDelegate {
-    func didLongPress(_ imageCell: ImageCell) {
+extension ViewController: CellDelegate {
+    func didLongPress(_ imageCell: JournalEntryCell) {
         // this cell was selected...
         
         guard let indexPath = collectionView.indexPath(for: imageCell) else {
@@ -167,7 +165,7 @@ extension ViewController: ImageCellDelegate {
         }
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) {
                   [weak self] alertAction in
-                  self?.DeletePhoto(indexPath: indexPath)
+                  self?.DeleteEntry(indexPath: indexPath)
               }
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -179,12 +177,12 @@ extension ViewController: ImageCellDelegate {
         
     }
     
-    private func DeletePhoto(indexPath: IndexPath){
+    private func DeleteEntry(indexPath: IndexPath){
         // when they click delete
         do{
-            try dataPersistence.deletePhoto(at: indexPath.row)
+            try dp.deleteEntry(at: indexPath.row)
             
-            allPhotos.remove(at: indexPath.row)
+            journalEntries.remove(at: indexPath.row)
             
             collectionView.deleteItems(at: [indexPath])
         } catch {
@@ -200,7 +198,6 @@ extension ViewController: ImageCellDelegate {
     
     private func didUpdatePhoto(){
         
-        // resave photo..
     }
     
     
@@ -210,19 +207,19 @@ extension ViewController: ImageCellDelegate {
 extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return allPhotos.count
+        return journalEntries.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? ImageCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? JournalEntryCell else {
             fatalError("couldt dequeue to the Imagecell..")
         }
         
-        let cellImage = allPhotos[indexPath.row]
-        cell.configureCell(imageObject: cellImage)
+        let cellEntry = journalEntries[indexPath.row]
+        cell.configureCell(journalEntry: cellEntry)
         
         //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
-        cell.imageDelegateReference = self
+        cell.JournalEntryDelegateReference = self
         
         return cell
     }
@@ -241,12 +238,14 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     //MARK: WHY ARE THESE NEEDED???
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        //MARK: what does this do?
+        //MARK: what does this do
+        // after the image is selected the picker controller will be dismissed.
         dismiss(animated: true)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        // what are we doing here???
+        // what are we doing here??? - once the user selects a photo from their library we gain access to it inside of here and we want to guard that it is an actual image they chose.
+        // taking the selected image that the user choose from the picker and assgin
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             // photo library is automatically a UIImagePickerController.. 
             print("image selection not found. ")
@@ -256,8 +255,24 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         // assigns the data from image which is retrieved from above into the uploaded..
         uploadedPhoto = image
         
-        // without the dissmis what WONT happen?/
+        // without the dissmis this controller will still show and I will not be able to segue
         dismiss(animated: true)
+        // after the controller dimisses I would like for the detail controller to show
+        
+        // want it to segue to the other view controller
+        guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
+            fatalError("couldnt access DetailController")
+        }
+        
+        let imageData = image.jpegData(compressionQuality: 1) ?? nil!
+        let createdImageObject = ImageObject(imageData: imageData, date: Date())
+        dv.seletedImage = JournalModel(image: createdImageObject , description: "please tell us what this photo means to you ")
+        
+        dv.isModalInPresentation = true
+
+
+        present(dv, animated: true)
+        
     }
     
 }

@@ -15,3 +15,7 @@ struct ImageObject: Codable & Equatable {
   let identifier = UUID().uuidString // gives access to unique identifier
 }
 
+//struct JournalModel: Codable & Equatable {
+//    let image: ImageObject
+//    let description: String
+//}
