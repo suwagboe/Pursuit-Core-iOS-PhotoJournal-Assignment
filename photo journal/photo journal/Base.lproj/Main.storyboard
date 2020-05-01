@@ -130,15 +130,8 @@
                                                         <color key="titleColor" red="0.72549175129999999" green="0.0" blue="0.36974961429999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </state>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r2R-3f-ca2">
-                                                    <rect key="frame" x="85" y="274" width="85" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="how does this photo make you feel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eqi-Ff-RZB">
-                                                    <rect key="frame" x="8" y="220" width="239" height="46"/>
+                                                    <rect key="frame" x="8" y="220" width="239" height="75"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -149,7 +142,7 @@
                                         <color key="backgroundColor" red="0.96930998560000003" green="0.64052090139999995" blue="0.91155132559999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <size key="customSize" width="267" height="369"/>
                                         <connections>
-                                            <outlet property="dateLabel" destination="r2R-3f-ca2" id="ULJ-Qa-ReZ"/>
+                                            <outlet property="EditButton" destination="Uk8-Q3-eM7" id="x5O-pp-Pjt"/>
                                             <outlet property="descriptionLabel" destination="Eqi-Ff-RZB" id="njB-Qk-uFm"/>
                                             <outlet property="extraActionsButton" destination="Uk8-Q3-eM7" id="sWr-bX-fLI"/>
                                             <outlet property="imageView" destination="2Lf-BY-uEh" id="WLo-0Z-3GV"/>

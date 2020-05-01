@@ -26,7 +26,6 @@ class ViewController: UIViewController {
         }
     }
     
-    
     private var photos = [ImageObject]()
     
     private var uploadedPhoto : UIImage?
@@ -45,7 +44,7 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         loadAllEntries()
     }
-//
+
     private func loadAllEntries() {
         do {
             try journalEntries = dp.loadEntries()
@@ -58,9 +57,7 @@ class ViewController: UIViewController {
            guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
                fatalError("couldnt access DetailController")
            }
-
            present(dv, animated: true)
-                      
        }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -71,7 +68,6 @@ class ViewController: UIViewController {
        }()
     
     private func appendNewEntry() {
-       // guard let photo =
     guard let photo = uploadedPhoto else {
             print("double check that the photo is avaiable...")
             return
