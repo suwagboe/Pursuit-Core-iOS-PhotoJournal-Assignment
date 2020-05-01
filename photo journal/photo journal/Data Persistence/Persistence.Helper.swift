@@ -94,16 +94,16 @@ class DataPersistence<T: Writeable> {
             }
         }
         
-//        else {
-//            throw DataPersistenceError.fileDoesNotExist(filename)
-//        }
+        else {
+            throw DataPersistenceError.fileDoesNotExist(filename)
+        }
         return entry
     }
-    
-    public func delete(photos index: Int) throws {
-        entry.remove(at: index)
-    }
-    
+//
+//    public func delete(photos index: Int) throws {
+//        entry.remove(at: index)
+//    }
+//
     //update
     
     @discardableResult
@@ -133,11 +133,11 @@ class DataPersistence<T: Writeable> {
     
     public func deleteEntry(at Index: Int) throws {
         
-        let deletedItem = entry.remove(at: Index)
+       _ = entry.remove(at: Index)
         
         do {
+           // delegate?.didDeleteItem(self, item: deletedItem)
             try saveAJournalEntry()
-            delegate?.didDeleteItem(self, item: deletedItem)
         } catch {
             throw DataPersistenceError.deletingError(error)
         }

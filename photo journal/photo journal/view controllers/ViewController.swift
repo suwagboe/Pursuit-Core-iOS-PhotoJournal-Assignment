@@ -52,10 +52,13 @@ class ViewController: UIViewController {
         }
     }
     
-    func segueImageToDetailWithImage(image: UIImage) {
+    func segueImageToDetailWithImage(journalEntry: JournalModel) {
            guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
                fatalError("couldnt access DetailController")
            }
+        
+        // need to pass the image...
+        dv.seletedImage = journalEntry
            dv.isModalInPresentation = true
            present(dv, animated: true)
        }
@@ -98,7 +101,7 @@ class ViewController: UIViewController {
         let indexPath = IndexPath(row: 0, section: 0)
         
         // ????
-        let newJorunal = JournalModel(image: justAddedImageObject, description: "Please enter descrpition", date: Date()
+        let newJorunal = JournalModel(image: justAddedImageObject, description: "Please enter descrpition"
         
         )
         
@@ -112,7 +115,6 @@ class ViewController: UIViewController {
         }
         
     }
-    
 
     private func showImageController(isCameraSelected: Bool){
         
@@ -124,7 +126,7 @@ class ViewController: UIViewController {
         present(imagePickerController, animated: true)
         
     }
-    
+
     
     @IBAction func addPictureButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -156,23 +158,28 @@ extension ViewController: EditButtonDelegate {
           let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         guard let indexPath = collectionView.indexPath(for: imageCell) else {
+            print("cant access the indexPath")
             return
         }
         
         // this gains access to the sepefic one that was clicked
         let journalEntryClicked = journalEntries[indexPath.row]
         // this gains access to the image data from the selected entry 
-        let imageFromJournalEntry = journalEntryClicked.image.imageData
+      //  let imageFromJournalEntry = journalEntryClicked.image
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) {
                   [weak self] alertAction in
-                  self?.DeleteEntry(indexPath: indexPath)
+            do{
+              try self?.DeleteEntry(indexPath: indexPath)
+            }catch {
+                print("couldnt delete inside of editbutton pressed")
+            }
               }
         
         let editAction = UIAlertAction(title: "Edit", style: .default) {
             [weak self] alertAction in
             
-            self?.segueImageToDetailWithImage(image: UIImage(data: imageFromJournalEntry) ?? UIImage(systemName: "questionmark")!)
+            self?.segueImageToDetailWithImage(journalEntry: journalEntryClicked)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -190,8 +197,9 @@ extension ViewController: EditButtonDelegate {
             try dp.deleteEntry(at: indexPath.row)
             
             journalEntries.remove(at: indexPath.row)
-            
-            collectionView.deleteItems(at: [indexPath])
+           
+         //   collectionView.deleteItems(at: [indexPath]) do not delete from collection view since you already did it in the array all you need to do is reload the collection view.
+            collectionView.reloadData()
         } catch {
             print("error in deleting \(error)")
         }
@@ -236,6 +244,25 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // need index
+        let index = indexPath.row
+        
+        guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
+              fatalError("couldnt access DetailController")
+          }
+        
+        let selectedEntry = journalEntries[index]
+        
+          
+          dv.seletedImage = selectedEntry
+          
+          // deactivivates the dismiss feature when presenting modally
+          dv.isModalInPresentation = true
+
+          present(dv, animated: true)
+    }
 }
 
 extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -264,18 +291,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         // after the controller dimisses I would like for the detail controller to show
         
         // want it to segue to the other view controller
-        guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
-            fatalError("couldnt access DetailController")
-        }
-        
-        let imageData = image.jpegData(compressionQuality: 1) ?? nil!
-        let createdImageObject = ImageObject(imageData: imageData, date: Date())
-        dv.seletedImage = JournalModel(image: createdImageObject , description: "please tell us what this photo means to you ", date: Date())
-        
-        // deactivivates the dismiss feature when presenting modally 
-        dv.isModalInPresentation = true
-
-        present(dv, animated: true)
+  
         
     }
     
