@@ -30,17 +30,7 @@ class DetailController: UIViewController {
         detailsOfImage?.text = model.description
     }
   
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        guard let vc = storyboard?.instantiateViewController(identifier: "viewController") as? ViewController else {
-//                  fatalError("couldnt access DetailController")
-//              }
-//        do {
-//           try  vc.dp.createAEntry(journalEntry: seletedImage!)
-//        } catch {
-//           print("the error is inside of detail controller: \(error)")
-//        }
-//        
-//    }
+
     private func updateJournalEntries() {
         
         

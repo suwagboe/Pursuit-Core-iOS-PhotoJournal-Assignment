@@ -158,17 +158,17 @@ extension ViewController: EditButtonDelegate {
         guard let indexPath = collectionView.indexPath(for: imageCell) else {
             return
         }
+        
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) {
                   [weak self] alertAction in
                   self?.DeleteEntry(indexPath: indexPath)
               }
         
-      
-    
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
+        present(alertController, animated: true) // cant present from inside of a custom cell.
         
     }
     
@@ -204,7 +204,9 @@ extension ViewController: UICollectionViewDataSource {
         cell.configureCell(journalEntry: cellEntry)
         
         //MARK: question why is the self of the custom delegate called here. and not in the viewDidLoad
-    //    cell.JournalEntryDelegateReference = self
+        // we assign the delegate from the custom cell to the cell itself so it knows what it is looking for.
+        cell.JournalEntryEditButtonDelegateReference = self
+        // this is where the delegate should look for changes? right?
         
         return cell
     }
@@ -258,8 +260,8 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         let createdImageObject = ImageObject(imageData: imageData, date: Date())
         dv.seletedImage = JournalModel(image: createdImageObject , description: "please tell us what this photo means to you ", date: Date())
         
+        // deactivivates the dismiss feature when presenting modally 
         dv.isModalInPresentation = true
-
 
         present(dv, animated: true)
         
