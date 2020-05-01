@@ -159,15 +159,24 @@ extension ViewController: EditButtonDelegate {
             return
         }
         
+        let journalEntryClicked = journalEntries[indexPath.row]
+        let imageFromJournalEntry = journalEntryClicked.image.imageData
+        
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) {
                   [weak self] alertAction in
                   self?.DeleteEntry(indexPath: indexPath)
               }
         
+        let editAction = UIAlertAction(title: "Edit", style: .default) {
+            [weak self] alertAction in
+            self?.segueImageToDetailWithImage(image: UIImage(data: imageFromJournalEntry) ?? UIImage(systemName: "questionmark")!)
+        }
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
+        alertController.addAction(editAction)
         present(alertController, animated: true) // cant present from inside of a custom cell.
         
     }
