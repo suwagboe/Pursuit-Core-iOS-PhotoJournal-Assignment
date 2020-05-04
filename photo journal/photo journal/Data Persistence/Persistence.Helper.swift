@@ -111,7 +111,11 @@ class DataPersistence<T: Writeable> {
     public func updateOne(_ oldItems: T, with newItem: T) -> Bool {
         if let index = entry.firstIndex(of: oldItems) {
             let result = updateTwo(newItem, at: index)
-            
+//            do {
+//                try saveAJournalEntry()
+//            }catch {
+//              print("error in saving inside of UpdateOne: \(error)")
+//            }
             return result
         }
         return false //
@@ -120,11 +124,11 @@ class DataPersistence<T: Writeable> {
     @discardableResult
     // does this one update after it is deleted
     public func updateTwo(_ aEntry: T, at Index: Int) -> Bool {
-        
+        // reassigning at the index give that this should be the new value
+        // I do not need to get rid of the thing at the index becuase the below automatically rewrites it.
         entry[Index] = aEntry
-        
         do {
-            try saveAJournalEntry()
+            try saveAJournalEntry() // and this resaves it 
             return true
         } catch {
             return false

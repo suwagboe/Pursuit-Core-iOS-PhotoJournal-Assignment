@@ -137,6 +137,12 @@
                                     <action selector="changeThePhoto:" destination="bvm-XZ-z9K" eventType="touchUpInside" id="hEp-rg-W27"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="please enter what this means to you here" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9FW-kq-2Ke">
+                                <rect key="frame" x="67" y="546" width="294" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="sKO-ue-xbF"/>
@@ -145,6 +151,7 @@
                     <connections>
                         <outlet property="addedPhoto" destination="cFd-X8-Pjw" id="L6T-Pi-ZE7"/>
                         <outlet property="detailsOfImage" destination="Nnu-lS-Xlr" id="Tmr-9g-tBP"/>
+                        <outlet property="textField" destination="9FW-kq-2Ke" id="Gap-yt-Toe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6iF-sX-xmg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

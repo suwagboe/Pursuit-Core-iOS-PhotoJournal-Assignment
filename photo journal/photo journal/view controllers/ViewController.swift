@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 
+
 class ViewController: UIViewController {
 
     var imagePickerController = UIImagePickerController()
@@ -52,13 +53,14 @@ class ViewController: UIViewController {
         }
     }
     
-    func segueImageToDetailWithImage(journalEntry: JournalModel) {
+    func segueImageToDetailWithImage(journalEntry: JournalModel, editButtonClicked: Bool? = nil ) {
            guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
                fatalError("couldnt access DetailController")
            }
         
         // need to pass the image...
-        dv.seletedImage = journalEntry
+        dv.givenJournaEntry = journalEntry
+        dv.instanceOfCustomDelegate = self
            dv.isModalInPresentation = true
            present(dv, animated: true)
        }
@@ -108,11 +110,14 @@ class ViewController: UIViewController {
         journalEntries.insert(newJorunal, at: 0)
         collectionView.insertItems(at: [indexPath])
         
-        do {
-            try dp.createAEntry(journalEntry: newJorunal)
-        }catch{
-            print("the error is: \(error)!!!!!!!!!!!!!")
-        }
+        
+//        do {
+//            try dp.createAEntry(journalEntry: newJorunal)
+//        }catch{
+//            print("the error is: \(error)!!!!!!!!!!!!!")
+//        }
+        
+        segueImageToDetailWithImage(journalEntry: newJorunal, editButtonClicked: false)
         
     }
 
@@ -179,7 +184,9 @@ extension ViewController: EditButtonDelegate {
         let editAction = UIAlertAction(title: "Edit", style: .default) {
             [weak self] alertAction in
             
-            self?.segueImageToDetailWithImage(journalEntry: journalEntryClicked)
+            self?.segueImageToDetailWithImage(journalEntry: journalEntryClicked, editButtonClicked: true)
+            
+            // want to set the custom delegate here to watch if the button is pressed
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -256,7 +263,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         let selectedEntry = journalEntries[index]
         
           
-          dv.seletedImage = selectedEntry
+          dv.givenJournaEntry = selectedEntry
           
           // deactivivates the dismiss feature when presenting modally
           dv.isModalInPresentation = true
@@ -286,13 +293,14 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         // assigns the data from image which is retrieved from above into the uploaded..
         uploadedPhoto = image
         
+        
         // without the dissmis this controller will still show and I will not be able to segue
         dismiss(animated: true)
         // after the controller dimisses I would like for the detail controller to show
-        
+        appendNewEntry()
         // want it to segue to the other view controller
-  
-        
+
+
     }
     
 }
@@ -307,4 +315,18 @@ extension UIImage {
             self.draw(in: CGRect(origin: .zero, size: size))
         }
     }
+}
+
+
+// want the call the custom delegate protcol here to change the seleted journal entry 
+extension ViewController: EditJournalEntryDelegate{
+    
+    func editEntry(oldEntry: JournalModel, newEntry: JournalModel) {
+        let indexLocation = journalEntries.firstIndex(of: oldEntry)!
+        
+        journalEntries.remove(at: indexLocation)
+        journalEntries.insert(newEntry, at: indexLocation)
+       // dp.update
+    }
+    
 }
