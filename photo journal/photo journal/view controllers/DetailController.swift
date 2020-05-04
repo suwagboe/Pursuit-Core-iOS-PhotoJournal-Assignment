@@ -121,17 +121,24 @@ class DetailController: UIViewController {
 
         } else {
            
-            guard let objectOfImage = givenJournaEntry?.image else {
+            guard let objectOfImage = addedPhoto?.image else {
                               print("the selectedImage is not appending properly")
                        return
                           }
+            
+            guard let photoData = objectOfImage.jpegData(compressionQuality: 1.0) else {
+                           return
+                       }
+        
+            let updatedImageObject = ImageObject(imageData: photoData, date: Date())
+
                    
 //            guard let text = editingText else {
 //                       print("couldnt access the info inside of the text view")
 //                       return
 //                   }
                    
-            let newJournalEntry = JournalModel(image: objectOfImage, description: editingText!)
+            let newJournalEntry = JournalModel(image: updatedImageObject, description: editingText!)
                            //dpInDetail.updateOne(givenJournaEntry!, with: newJournalEntry) // to update based on what is typed
             do {
                 try vc.dp.createAEntry(journalEntry: newJournalEntry)
@@ -209,6 +216,9 @@ extension DetailController: UIImagePickerControllerDelegate, UINavigationControl
         }// now I have access to the image that was clicked
         print("editingImage before the it being selected it \(editingImage)")
         editingImage = image
+        DispatchQueue.main.async {
+            self.addedPhoto?.image = image
+        }
         print("editing image is now = \(editingImage)")
         
         dismiss(animated: true)
