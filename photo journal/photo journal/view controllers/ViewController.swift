@@ -243,32 +243,29 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let screenSize: CGSize = UIScreen.main.bounds.size
         let itemWidth: CGFloat = screenSize.width * 0.8// this is 80% of the device
-        let itemHeight: CGFloat = screenSize.height * 0.4
+        let itemHeight: CGFloat = screenSize.height * 0.5
         
         return CGSize(width: itemWidth, height: itemHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        return UIEdgeInsets(top: 5, left: 3, bottom: 5, right: 3)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // need index
         let index = indexPath.row
-        
-        guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
-              fatalError("couldnt access DetailController")
-          }
+    //    guard let dv = storyboard?.instantiateViewController(identifier: "DetailController") as? DetailController else {
+       //       fatalError("couldnt access DetailController")//
+          //}
         
         let selectedEntry = journalEntries[index]
-        
-          
-          dv.givenJournaEntry = selectedEntry
-          
+     
+         // dv.givenJournaEntry = selectedEntry
           // deactivivates the dismiss feature when presenting modally
-          dv.isModalInPresentation = true
-
-          present(dv, animated: true)
+         // dv.isModalInPresentation = true
+        segueImageToDetailWithImage(journalEntry: selectedEntry, editButtonClicked: false)
+         // present(dv, animated: true)
     }
 }
 

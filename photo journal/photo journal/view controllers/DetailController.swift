@@ -16,7 +16,6 @@ protocol EditJournalEntryDelegate: AnyObject {
 class DetailController: UIViewController {
     
     @IBOutlet weak var addedPhoto: UIImageView?
-    @IBOutlet weak var detailsOfImage: UITextView?
     
     @IBOutlet weak var textField: UITextField!
     
@@ -41,12 +40,14 @@ class DetailController: UIViewController {
         
     }
     
-    func configureDetailController(){
+    func configureDetailController()  {
+        
         guard let model = givenJournaEntry else {
             return
         }
         addedPhoto?.image = UIImage(data: model.image.imageData)
-        detailsOfImage?.text = model.description
+        //detailsOfImage?.text = model.description
+        textField.text = model.description
     }
     
     
@@ -93,7 +94,7 @@ class DetailController: UIViewController {
             if let photoData =  addedPhoto?.image?.jpegData(compressionQuality: 1.0) {
                   let updatedImageObject = ImageObject(imageData:photoData, date: Date())
 
-                          entry = JournalModel(image: updatedImageObject, description: (detailsOfImage?.text!)! )
+                entry = JournalModel(image: updatedImageObject, description: givenJournaEntry!.description )
                             }
              } else {
                  // if the text was changed do this
