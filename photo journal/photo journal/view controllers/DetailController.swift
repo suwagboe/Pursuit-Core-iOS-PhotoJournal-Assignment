@@ -29,16 +29,16 @@ class DetailController: UIViewController {
     private var editingEntry : Bool?
     private var editingImage : UIImage?
     private var editingText: String?
-
-     var givenJournaEntry: JournalModel?
-        
+    
+    var givenJournaEntry: JournalModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         textField.delegate = self
         //detailsOfImage?.delegate = self
         imagePickerDelegate.delegate = self
         configureDetailController()
-
+        
     }
     
     func configureDetailController(){
@@ -49,131 +49,106 @@ class DetailController: UIViewController {
         detailsOfImage?.text = model.description
     }
     
-  
+    
     private func updateJournalEntries() {
         
     }
     private func showImageController(isCameraSelected: Bool){
-          
-          imagePickerDelegate.sourceType = .photoLibrary
-          
-          if isCameraSelected {
-              imagePickerDelegate.sourceType = .photoLibrary
-          }
-          present(imagePickerDelegate, animated: true)
-          
-      }
-    
-    @IBAction func changeThePhoto(_ sender: UIButton) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-              
-              let cameraAction = UIAlertAction(title: "Camera", style: .default) {
-                  [weak self] alertAction in
-                  self?.showImageController(isCameraSelected: true)
-                 
-              }
-              
-              let photoLibraryAction = UIAlertAction(title: "photo library", style: .default) {
-                  [weak self] alertAction in
-                  self?.showImageController(isCameraSelected: false)
-              }
-              let cancelAction = UIAlertAction(title: "cancel", style: .cancel)
-          
-              alertController.addAction(cancelAction)
-              alertController.addAction(cameraAction)
-              alertController.addAction(photoLibraryAction)
-              present(alertController, animated: true)
+        
+        imagePickerDelegate.sourceType = .photoLibrary
+        
+        if isCameraSelected {
+            imagePickerDelegate.sourceType = .photoLibrary
+        }
+        present(imagePickerDelegate, animated: true)
         
     }
     
+    @IBAction func changeThePhoto(_ sender: UIButton) {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) {
+            [weak self] alertAction in
+            self?.showImageController(isCameraSelected: true)
+            
+        }
+        
+        let photoLibraryAction = UIAlertAction(title: "photo library", style: .default) {
+            [weak self] alertAction in
+            self?.showImageController(isCameraSelected: false)
+        }
+        let cancelAction = UIAlertAction(title: "cancel", style: .cancel)
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(cameraAction)
+        alertController.addAction(photoLibraryAction)
+        present(alertController, animated: true)
+        
+    }
+    
+    private func textWasChanged() -> JournalModel {
+        var entry: JournalModel?
+        
+        if editingText == nil {
+            if let photoData =  addedPhoto?.image?.jpegData(compressionQuality: 1.0) {
+                  let updatedImageObject = ImageObject(imageData:photoData, date: Date())
+
+                          entry = JournalModel(image: updatedImageObject, description: (detailsOfImage?.text!)! )
+                            }
+             } else {
+                 // if the text was changed do this
+               // addedPhoto?.image
+                     print("the selectedImage is not appending properly")
+                       let size = UIScreen.main.bounds.size
+            let rect = AVMakeRect(aspectRatio: (addedPhoto?.image!.size)!, insideRect: CGRect(origin: CGPoint.zero, size: size))
+            let resizedPhoto = addedPhoto?.image!.resizeImage(width: rect.size.width, height: rect.size.height)
+            if let photoData = resizedPhoto!.jpegData(compressionQuality: 1.0)  {
+                                     let updatedImageObject = ImageObject(imageData: photoData, date: Date())
+                                        
+                                     entry = JournalModel(image: updatedImageObject, description: editingText!)
+                                  }
+                }
+        return entry!
+    }
+    
     @IBAction func updateEntry(_ sender: UIButton) {
-        
         guard let vc = storyboard?.instantiateViewController(identifier: "ViewController") as? ViewController else {
-                         fatalError("couldnt access DetailController")
-                     }
-        if editingEntry == true {
-            let size = UIScreen.main.bounds.size
-             
-            // this is the size that we want the photo to be...
-            
-            guard let image = editingImage else {
-                return
-            }
-            let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(origin: CGPoint.zero, size: size))
-             
-             let resizedPhoto = image.resizeImage(width: rect.size.width, height: rect.size.height)
-             
-             print("this is the image after resizing it \(resizedPhoto)")
-             
-             // converts photo into data
-             guard let photoData = resizedPhoto.jpegData(compressionQuality: 1.0) else {
-                 return
-             }
-             let justAddedImageObject = ImageObject(imageData: photoData, date: Date())
-       
-            let editingJournalEntry = JournalModel(image: justAddedImageObject, description: editingText!)
-            
-            print("the editing section is working")
-            // this is where I access the custom delegate
-           
-            instanceOfCustomDelegate?.editEntry(oldEntry: givenJournaEntry!, newEntry: editingJournalEntry)
-            dismiss(animated: true)
-
-        } else {
-           
-            guard let objectOfImage = addedPhoto?.image else {
-                              print("the selectedImage is not appending properly")
-                       return
-                          }
-            
-            guard let photoData = objectOfImage.jpegData(compressionQuality: 1.0) else {
-                           return
-                       }
-        
-            let updatedImageObject = ImageObject(imageData: photoData, date: Date())
-
-                   
-//            guard let text = editingText else {
-//                       print("couldnt access the info inside of the text view")
-//                       return
-//                   }
-                   
-            let newJournalEntry = JournalModel(image: updatedImageObject, description: editingText!)
-                           //dpInDetail.updateOne(givenJournaEntry!, with: newJournalEntry) // to update based on what is typed
+            fatalError("couldnt access DetailController")
+        }
+           // textWasChanged()
+            //dpInDetail.updateOne(givenJournaEntry!, with: newJournalEntry) // to update based on what is typed
             do {
-                try vc.dp.createAEntry(journalEntry: newJournalEntry)
+                try vc.dp.createAEntry(journalEntry: textWasChanged())
             } catch {
                 print("error = \(error)")
             }
             print("the create section is working")
             
-            instanceOfCustomDelegate?.editEntry(oldEntry: givenJournaEntry!, newEntry: newJournalEntry)
+            instanceOfCustomDelegate?.editEntry(oldEntry: givenJournaEntry!, newEntry: textWasChanged())
             dismiss(animated: true)
-
+            
         }
         
-
-    }
-    
-}
+        
+    } // end of class
 /*
-extension DetailController: UITextViewDelegate {
-    func textViewDidEndEditing(_ textView: UITextView) {
-     
-    }
-    
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        guard let text = textView.text else {
-                        print("the text was not properly captured")
-                        return false
-                    }
-                    
-                    detailsOfImage?.text = text
-                     editingText = text
-        textView.resignFirstResponder()
-        return true
-    }
-}
+ extension DetailController: UITextViewDelegate {
+ func textViewDidEndEditing(_ textView: UITextView) {
+ 
+ }
+ 
+ func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+ guard let text = textView.text else {
+ print("the text was not properly captured")
+ return false
+ }
+ 
+ detailsOfImage?.text = text
+ editingText = text
+ textView.resignFirstResponder()
+ return true
+ }
+ }
  
  */
 
@@ -189,17 +164,17 @@ extension DetailController: UITextFieldDelegate {
         } else {
             guard let text = textField.text else {
                 return false
-        }
+            }
             editingText = text
             print(editingText)
-         }
-       
-
-                    textField.resignFirstResponder()
-                    return true
+        }
+        
+        
+        textField.resignFirstResponder()
+        return true
     }
 }
- 
+
 
 extension DetailController: UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
     
