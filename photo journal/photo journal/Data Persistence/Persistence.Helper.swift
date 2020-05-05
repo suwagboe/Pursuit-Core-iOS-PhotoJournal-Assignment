@@ -93,10 +93,10 @@ class DataPersistence<T: Writeable> {
                 throw DataPersistenceError.noData
             }
         }
+//        else {
+//            throw DataPersistenceError.fileDoesNotExist(filename)
+//        }
         
-        else {
-            throw DataPersistenceError.fileDoesNotExist(filename)
-        }
         return entry
     }
 //
@@ -137,8 +137,8 @@ class DataPersistence<T: Writeable> {
     
     public func deleteEntry(at Index: Int) throws {
         
-       _ = entry.remove(at: Index)
-        
+        let _ = try? loadEntries()
+      entry.remove(at: Index)
         do {
            // delegate?.didDeleteItem(self, item: deletedItem)
             try saveAJournalEntry()
